@@ -2,25 +2,9 @@ from collections import defaultdict
 from queue import Queue
 
 
-class Graph():
-    def __init__(self,n) -> None:
-        #create a adjMatrix Sq. of size n
-        self.n = n+1  #size of graph
-        self.adjMatrix = [[0]*n for _ in range(self.n)] # 2D matrix
-    
-    def addEdge(self,u,v,wt=1):
-        #it's  undirected graph
-        self.adjMatrix[u][v] =wt
-        #self.adjMatrix[v][u] =1
-    
-    def display(self):
-        for row in self.adjMatrix:
-            print(row)
-
 class  graphAdj():
     def __init__(self) -> None:
-        self.adjList = defaultdict()
-        self.adjList.default_factory=list  #set default valud to []
+        self.adjList = defaultdict(list) #default adjacency list of  new node is []
         
 
     def addEdge(self,u,v,wt=1):
@@ -31,10 +15,11 @@ class  graphAdj():
         for i in self.adjList.keys():
             print(i,[_ for _,i in self.adjList[i]])
     
-    def bfsTraversal(self,ch):
+    def bfsTraversal(self,ch,vis=None):
         q = Queue()
-        #vis = defaultdict(default_factory=0)
-        
+        if vis ==None:
+            vis = dict() # function level visted array, if global nt given
+    
         q.put(ch)
         vis[ch]=1
 
@@ -48,12 +33,14 @@ class  graphAdj():
                     q.put(nbr)
                     vis[nbr]=1
 
-    def dfsTraversal(self,ch):
+    def dfsTraversal(self,ch,vis=None):
         stack =[]
+        if vis ==None:
+            vis = dict() # function level visted array, if global nt given
         stack.append(ch)
         vis[ch]=1
 
-        while len(stack)>0:
+        while stack:
             top = stack.pop()
             print(top,end=" ")
 
@@ -63,16 +50,16 @@ class  graphAdj():
                     stack.append(nbr)
                     vis[nbr]=1
 
-            
+    
 
 
 
 
-vis = defaultdict(default_factory=0)  #this is visited bool
+
 
 if __name__ == "__main__":
     gp =  graphAdj()
-    vis = defaultdict(default_factory=0)
+    vis =dict()
     gp.addEdge(1,2)
     gp.addEdge(1,4)
     gp.addEdge(3,1)
@@ -83,7 +70,8 @@ if __name__ == "__main__":
     
     for node in range(1,5):
         if node not in vis:
-            gp.dfsTraversal(node)
+            gp.dfsTraversal(node,vis)
+            
             print("\n")
     
     
